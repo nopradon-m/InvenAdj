@@ -8,7 +8,8 @@ Screens:
         ClearCollect(ItemCollections,
         { productNo:"",
           MPN:"",
-          Description:"",
+          warehouse:"",
+          location:"",
           qty:0,
           Unit:""
         }
@@ -262,7 +263,8 @@ Screens:
                        Title:"Draft",
                        productNo:productNo,
                        MPN:MPN,
-                       Description:Description,
+                       warehouse:warehouse,
+                       kLocation:location,
                        QTY:qty,
                        kUnit:Unit
                        }));
@@ -1561,7 +1563,7 @@ Screens:
                         Size: =10
                         Visible: =varTabSelected = 2
                         Width: =213
-                        X: =286
+                        X: =311
                         Y: =46
                   - Label4_1:
                       Control: Label@2.5.1
@@ -1572,7 +1574,7 @@ Screens:
                         Text: ="Product No :"
                         Visible: =varTabSelected = 2
                         Width: =86
-                        X: =83
+                        X: =50
                         Y: =46
                   - locationInput:
                       Control: Classic/TextInput@2.3.2
@@ -1585,7 +1587,7 @@ Screens:
                         Size: =10
                         Visible: =varTabSelected = 2
                         Width: =153
-                        X: =825
+                        X: =850
                         Y: =46
                   - Label4_2:
                       Control: Label@2.5.1
@@ -1596,7 +1598,7 @@ Screens:
                         Text: ="Location :"
                         Visible: =varTabSelected = 2
                         Width: =67
-                        X: =759
+                        X: =784
                         Y: =46
                   - productNoInput:
                       Control: Classic/TextInput@2.3.2
@@ -1609,8 +1611,8 @@ Screens:
                         PaddingLeft: =5
                         Size: =10
                         Visible: =varTabSelected = 2
-                        Width: =63
-                        X: =169
+                        Width: =115
+                        X: =136
                         Y: =46
                   - Label4_3:
                       Control: Label@2.5.1
@@ -1621,7 +1623,7 @@ Screens:
                         Text: ="MPN :"
                         Visible: =varTabSelected = 2
                         Width: =48
-                        X: =239
+                        X: =264
                         Y: =46
                   - Label4_4:
                       Control: Label@2.5.1
@@ -1632,7 +1634,7 @@ Screens:
                         Text: ="QTY :"
                         Visible: =varTabSelected = 2
                         Width: =45
-                        X: =1005
+                        X: =1030
                         Y: =47
                   - qtyInput:
                       Control: Classic/TextInput@2.3.2
@@ -1646,7 +1648,7 @@ Screens:
                         Size: =10
                         Visible: =varTabSelected = 2
                         Width: =77
-                        X: =1050
+                        X: =1075
                         Y: =47
                   - Label4_5:
                       Control: Label@2.5.1
@@ -1657,7 +1659,7 @@ Screens:
                         Text: ="Unit :"
                         Visible: =varTabSelected = 2
                         Width: =46
-                        X: =1127
+                        X: =1152
                         Y: =47
                   - Label4_6:
                       Control: Label@2.5.1
@@ -1668,7 +1670,7 @@ Screens:
                         Text: ="Warehouse:"
                         Visible: =varTabSelected = 2
                         Width: =87
-                        X: =507
+                        X: =532
                         Y: =46
                   - warehouseInput:
                       Control: Classic/TextInput@2.3.2
@@ -1681,7 +1683,7 @@ Screens:
                         Size: =10
                         Visible: =varTabSelected = 2
                         Width: =153
-                        X: =589
+                        X: =614
                         Y: =46
                   - unitInput:
                       Control: Classic/TextInput@2.3.2
@@ -1694,7 +1696,7 @@ Screens:
                         Size: =10
                         Visible: =varTabSelected = 2
                         Width: =77
-                        X: =1173
+                        X: =1198
                         Y: =47
                   - Label4_14:
                       Control: Label@2.5.1
@@ -1710,16 +1712,18 @@ Screens:
                         Height: =32
                         HoverColor: =RGBA(255, 255, 255, 1)
                         OnSelect: |-
-                          =If(IsBlank(productNoInput.Text) || IsBlank(mpnInput.Text) || IsBlank(locationInput.Text) || IsBlank(qtyInput.Text)|| IsBlank(unitInput.Text)|| IsBlank(warehouseInput.Text),Notify("Please Insert Recommended Data \ กรอกข้อมูลให้ครบถ้วน",NotificationType.Error),
+                          =If(
+                              IsBlank(productNoInput.Text) || IsBlank(mpnInput.Text) || IsBlank(qtyInput.Text) || IsBlank(unitInput.Text),
+                              Notify("Please Insert Required Data \ กรุณากรอกข้อมูล Product No, MPN และ QTY ให้ครบถ้วน", NotificationType.Error),
 
                           Patch(ItemCollections,
                           Defaults(ItemCollections),
-                          { Brand: productNoInput.Text,
-                            MPN:mpnInput.Text,
-                            Description:locationInput.Text,
-                            qty:Value(qtyInput.Text),
-                            Unit:unitInput.Text,
-                            Amount:Value(warehouseInput.Text)});
+                          { productNo: productNoInput.Text,
+                             MPN:mpnInput.Text,
+                              location: If(IsBlank(locationInput.Text), "-", locationInput.Text),
+                              warehouse: If(IsBlank(warehouseInput.Text), "-", warehouseInput.Text),
+                              qty:Value(qtyInput.Text),
+                              Unit:unitInput.Text});
 
                           Reset(productNoInput);
                           Reset(mpnInput);
@@ -2020,9 +2024,9 @@ Screens:
                 Control: Classic/TextInput@2.3.2
                 Properties:
                   Align: =Align.Center
-                  Default: =ThisItem.Brand
+                  Default: =ThisItem.productNo
                   Height: =31
-                  OnChange: =Patch(ItemCollections,ThisItem,{Brand:TextInput4.Text})
+                  OnChange: =Patch(ItemCollections,ThisItem,{productNo:TextInput4.Text})
                   OnSelect: =Select(Parent)
                   RadiusBottomLeft: =0
                   RadiusBottomRight: =0
@@ -2049,9 +2053,9 @@ Screens:
                 Control: Classic/TextInput@2.3.2
                 Properties:
                   Align: =Align.Center
-                  Default: =ThisItem.Description
+                  Default: =ThisItem.warehouse
                   Height: =31
-                  OnChange: =Patch(ItemCollections,ThisItem,{Description:TextInput4_2.Text})
+                  OnChange: =Patch(ItemCollections,ThisItem,{warehouse:TextInput4_2.Text})
                   OnSelect: =Select(Parent)
                   RadiusBottomLeft: =0
                   RadiusBottomRight: =0
@@ -2064,9 +2068,9 @@ Screens:
                 Control: Classic/TextInput@2.3.2
                 Properties:
                   Align: =Align.Center
-                  Default: =ThisItem.qty
+                  Default: =ThisItem.location
                   Height: =31
-                  OnChange: =Patch(ItemCollections,ThisItem,{qty:Value(TextInput4_3.Text)})
+                  OnChange: =Patch(ItemCollections,ThisItem,{location:TextInput4_3.Text})
                   OnSelect: =Select(Parent)
                   RadiusBottomLeft: =0
                   RadiusBottomRight: =0
@@ -2082,8 +2086,10 @@ Screens:
                   Default: =Text(ThisItem.Unit)
                   Height: =31
                   OnChange: |-
-                    =Patch(ItemCollections,ThisItem,{Amount: Value(TextInput4_5.Text)})
+                    =Patch(ItemCollections,ThisItem,{Unit: TextInput4_5.Text})
                   OnSelect: =Select(Parent)
+                  PaddingLeft: =4
+                  PaddingRight: =20
                   RadiusBottomLeft: =0
                   RadiusBottomRight: =0
                   RadiusTopLeft: =0
@@ -2095,9 +2101,9 @@ Screens:
                 Control: Classic/TextInput@2.3.2
                 Properties:
                   Align: =Align.Center
-                  Default: =ThisItem.Unit
+                  Default: =ThisItem.qty
                   Height: =31
-                  OnChange: =Patch(ItemCollections,ThisItem,{Unit:TextInput4_4.Text})
+                  OnChange: =Patch(ItemCollections,ThisItem,{qty:Value(TextInput4_4.Text)})
                   OnSelect: =Select(Parent)
                   RadiusBottomLeft: =0
                   RadiusBottomRight: =0
@@ -2451,12 +2457,12 @@ Screens:
                       Collect(
                           colExcel,
                           {
-                              Brand: First(Split(ThisRecord.Value, Char(9))).Value, // แยกคอลัมน์แรก
-                              MPN: Last(FirstN(Split(ThisRecord.Value, Char(9)), 2)).Value, // แยกคอลัมน์ที่สอง
-                              Description: Last(FirstN(Split(ThisRecord.Value, Char(9)), 3)).Value, // แยกคอลัมน์ที่สาม
-                              qty: Value(Last(FirstN(Split(ThisRecord.Value, Char(9)), 4)).Value), // แยกคอลัมน์ที่สี่และแปลงเป็นตัวเลข
-                              Unit: Last(FirstN(Split(ThisRecord.Value, Char(9)), 5)).Value, // แยกคอลัมน์ที่ห้า
-                              Amount: Value(Last(FirstN(Split(ThisRecord.Value, Char(9)), 6)).Value) // แยกคอลัมน์ที่หกและแปลงเป็นตัวเลข
+                              productNo: First(Split(ThisRecord.Value, Char(9))).Value, // แยกคอลัมน์ที่ 1 (Product No)
+                              MPN: Last(FirstN(Split(ThisRecord.Value, Char(9)), 2)).Value, // แยกคอลัมน์ที่ 2 (MPN)
+                              warehouse: Last(FirstN(Split(ThisRecord.Value, Char(9)), 3)).Value, // แยกคอลัมน์ที่ 3 (Warehouse)
+                              location: Last(FirstN(Split(ThisRecord.Value, Char(9)), 4)).Value, // แยกคอลัมน์ที่ 4 (Location)
+                              qty: Value(Last(FirstN(Split(ThisRecord.Value, Char(9)), 5)).Value), // แยกคอลัมน์ที่ 5 (QTY) และแปลงเป็นตัวเลข
+                              Unit: Last(FirstN(Split(ThisRecord.Value, Char(9)), 6)).Value // แยกคอลัมน์ที่ 6 (Unit)
                           }
                       )
                   )
