@@ -115,7 +115,7 @@ Screens:
             Y: =22
       - Label1_8:
           Control: Label@2.5.1
-          Group: Group_GalleryHeader
+          Group: Group4
           Properties:
             Align: =Align.Center
             BorderColor: =RGBA(166, 166, 166, 1)
@@ -131,13 +131,13 @@ Screens:
             PressedBorderColor: =Label1_8.BorderColor
             PressedColor: =Label1_8.Color
             PressedFill: =Label1_8.Fill
-            Text: ="Brand"
+            Text: ="Product No"
             Visible: =varTabSelected=2
             Width: =257
             Y: =265
       - Label1_2:
           Control: Label@2.5.1
-          Group: Group_GalleryHeader
+          Group: Group4
           Properties:
             Align: =Align.Center
             BorderColor: =RGBA(166, 166, 166, 1)
@@ -159,7 +159,7 @@ Screens:
             Y: =265
       - Label1_3:
           Control: Label@2.5.1
-          Group: Group_GalleryHeader
+          Group: Group4
           Properties:
             Align: =Align.Center
             BorderColor: =RGBA(166, 166, 166, 1)
@@ -174,14 +174,14 @@ Screens:
             PressedBorderColor: =Label1_3.BorderColor
             PressedColor: =Label1_3.Color
             PressedFill: =Label1_3.Fill
-            Text: ="Description"
+            Text: ="Location"
             Visible: =varTabSelected=2
-            Width: =427
-            X: =519
+            Width: =344
+            X: =799
             Y: =265
       - Label1_5:
           Control: Label@2.5.1
-          Group: Group_GalleryHeader
+          Group: Group4
           Properties:
             Align: =Align.Center
             BorderColor: =RGBA(166, 166, 166, 1)
@@ -199,11 +199,11 @@ Screens:
             Text: ="QTY"
             Visible: =varTabSelected=2
             Width: =88
-            X: =946
+            X: =1143
             Y: =265
       - Label1_6:
           Control: Label@2.5.1
-          Group: Group_GalleryHeader
+          Group: Group4
           Properties:
             Align: =Align.Center
             BorderColor: =RGBA(166, 166, 166, 1)
@@ -220,12 +220,12 @@ Screens:
             PressedFill: =Label1_6.Fill
             Text: ="Unit"
             Visible: =varTabSelected=2
-            Width: =64
-            X: =1034
+            Width: =135
+            X: =1231
             Y: =265
       - Label1_7:
           Control: Label@2.5.1
-          Group: Group_GalleryHeader
+          Group: Group4
           Properties:
             Align: =Align.Center
             BorderColor: =RGBA(166, 166, 166, 1)
@@ -240,10 +240,10 @@ Screens:
             PressedBorderColor: =Label1_7.BorderColor
             PressedColor: =Label1_7.Color
             PressedFill: =Label1_7.Fill
-            Text: ="Amount"
+            Text: ="Warehouse"
             Visible: =varTabSelected=2
-            Width: =268
-            X: =1098
+            Width: =280
+            X: =519
             Y: =265
       - Form1:
           Control: Form@2.4.4
@@ -1561,7 +1561,7 @@ Screens:
                         Size: =10
                         Visible: =varTabSelected = 2
                         Width: =213
-                        X: =296
+                        X: =286
                         Y: =46
                   - Label4_1:
                       Control: Label@2.5.1
@@ -1569,22 +1569,23 @@ Screens:
                       Properties:
                         Height: =29
                         Size: =10
-                        Text: ="Brand :"
+                        Text: ="Product No :"
                         Visible: =varTabSelected = 2
-                        Width: =72
+                        Width: =86
+                        X: =83
                         Y: =46
-                  - desInput:
+                  - locationInput:
                       Control: Classic/TextInput@2.3.2
                       Group: Group1
                       Properties:
                         Align: =Align.Center
                         Default: =
                         Height: =29
-                        HintText: ="Input Description"
+                        HintText: ="Input Location"
                         Size: =10
                         Visible: =varTabSelected = 2
-                        Width: =275
-                        X: =602
+                        Width: =153
+                        X: =825
                         Y: =46
                   - Label4_2:
                       Control: Label@2.5.1
@@ -1592,23 +1593,24 @@ Screens:
                       Properties:
                         Height: =29
                         Size: =10
-                        Text: ="Description :"
+                        Text: ="Location :"
                         Visible: =varTabSelected = 2
-                        Width: =111
-                        X: =514
+                        Width: =67
+                        X: =759
                         Y: =46
-                  - brandInput:
+                  - productNoInput:
                       Control: Classic/TextInput@2.3.2
                       Group: Group1
                       Properties:
                         Align: =Align.Center
                         Default: =
                         Height: =29
-                        HintText: ="Input Brand"
+                        HintText: ="Input Product No"
+                        PaddingLeft: =5
                         Size: =10
                         Visible: =varTabSelected = 2
-                        Width: =189
-                        X: =54
+                        Width: =63
+                        X: =169
                         Y: =46
                   - Label4_3:
                       Control: Label@2.5.1
@@ -1619,7 +1621,7 @@ Screens:
                         Text: ="MPN :"
                         Visible: =varTabSelected = 2
                         Width: =48
-                        X: =249
+                        X: =239
                         Y: =46
                   - Label4_4:
                       Control: Label@2.5.1
@@ -1630,8 +1632,8 @@ Screens:
                         Text: ="QTY :"
                         Visible: =varTabSelected = 2
                         Width: =45
-                        X: =877
-                        Y: =46
+                        X: =1005
+                        Y: =47
                   - qtyInput:
                       Control: Classic/TextInput@2.3.2
                       Group: Group1
@@ -1644,8 +1646,8 @@ Screens:
                         Size: =10
                         Visible: =varTabSelected = 2
                         Width: =77
-                        X: =922
-                        Y: =46
+                        X: =1050
+                        Y: =47
                   - Label4_5:
                       Control: Label@2.5.1
                       Group: Group1
@@ -1655,31 +1657,31 @@ Screens:
                         Text: ="Unit :"
                         Visible: =varTabSelected = 2
                         Width: =46
-                        X: =999
-                        Y: =46
+                        X: =1127
+                        Y: =47
                   - Label4_6:
                       Control: Label@2.5.1
                       Group: Group1
                       Properties:
                         Height: =29
                         Size: =10
-                        Text: ="Amount :"
+                        Text: ="Warehouse:"
                         Visible: =varTabSelected = 2
-                        Width: =67
-                        X: =1122
+                        Width: =87
+                        X: =507
                         Y: =46
-                  - amountInput:
+                  - warehouseInput:
                       Control: Classic/TextInput@2.3.2
                       Group: Group1
                       Properties:
+                        Align: =Align.Center
                         Default: =
-                        Format: =TextFormat.Number
                         Height: =29
-                        HintText: ="Input Amount"
+                        HintText: ="Input Warehouse"
                         Size: =10
                         Visible: =varTabSelected = 2
                         Width: =153
-                        X: =1189
+                        X: =589
                         Y: =46
                   - unitInput:
                       Control: Classic/TextInput@2.3.2
@@ -1692,8 +1694,8 @@ Screens:
                         Size: =10
                         Visible: =varTabSelected = 2
                         Width: =77
-                        X: =1045
-                        Y: =46
+                        X: =1173
+                        Y: =47
                   - Label4_14:
                       Control: Label@2.5.1
                       Properties:
@@ -1708,22 +1710,22 @@ Screens:
                         Height: =32
                         HoverColor: =RGBA(255, 255, 255, 1)
                         OnSelect: |-
-                          =If(IsBlank(brandInput.Text) || IsBlank(mpnInput.Text) || IsBlank(desInput.Text) || IsBlank(qtyInput.Text)|| IsBlank(unitInput.Text)|| IsBlank(amountInput.Text),Notify("Please Insert Recommended Data \ กรอกข้อมูลให้ครบถ้วน",NotificationType.Error),
+                          =If(IsBlank(productNoInput.Text) || IsBlank(mpnInput.Text) || IsBlank(locationInput.Text) || IsBlank(qtyInput.Text)|| IsBlank(unitInput.Text)|| IsBlank(warehouseInput.Text),Notify("Please Insert Recommended Data \ กรอกข้อมูลให้ครบถ้วน",NotificationType.Error),
 
                           Patch(ItemCollections,
                           Defaults(ItemCollections),
-                          { Brand: brandInput.Text,
+                          { Brand: productNoInput.Text,
                             MPN:mpnInput.Text,
-                            Description:desInput.Text,
+                            Description:locationInput.Text,
                             qty:Value(qtyInput.Text),
                             Unit:unitInput.Text,
-                            Amount:Value(amountInput.Text)});
+                            Amount:Value(warehouseInput.Text)});
 
-                          Reset(brandInput);
+                          Reset(productNoInput);
                           Reset(mpnInput);
-                          Reset(desInput);
+                          Reset(locationInput);
                           Reset(unitInput);
-                          Reset(amountInput);
+                          Reset(warehouseInput);
                           Reset(qtyInput);
                           )
                         Size: =10
@@ -2056,7 +2058,7 @@ Screens:
                   RadiusTopLeft: =0
                   RadiusTopRight: =0
                   Size: =15
-                  Width: =429
+                  Width: =281
                   X: =518
             - TextInput4_3:
                 Control: Classic/TextInput@2.3.2
@@ -2071,13 +2073,13 @@ Screens:
                   RadiusTopLeft: =0
                   RadiusTopRight: =0
                   Size: =15
-                  Width: =88
-                  X: =947
+                  Width: =344
+                  X: =799
             - TextInput4_5:
                 Control: Classic/TextInput@2.3.2
                 Properties:
                   Align: =Align.Center
-                  Default: =Text(ThisItem.Amount,"#,###.00")
+                  Default: =Text(ThisItem.Unit)
                   Height: =31
                   OnChange: |-
                     =Patch(ItemCollections,ThisItem,{Amount: Value(TextInput4_5.Text)})
@@ -2087,8 +2089,8 @@ Screens:
                   RadiusTopLeft: =0
                   RadiusTopRight: =0
                   Size: =15
-                  Width: =268
-                  X: =1098
+                  Width: =134
+                  X: =1230
             - TextInput4_4:
                 Control: Classic/TextInput@2.3.2
                 Properties:
@@ -2102,8 +2104,8 @@ Screens:
                   RadiusTopLeft: =0
                   RadiusTopRight: =0
                   Size: =15
-                  Width: =63
-                  X: =1035
+                  Width: =87
+                  X: =1143
             - Icon2_1:
                 Control: Classic/Icon@2.5.0
                 Properties:
