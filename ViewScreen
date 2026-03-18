@@ -1,0 +1,2786 @@
+Screens:
+  ViewScreen:
+    Properties:
+      OnVisible: |+
+        =If(Not(IsBlank(accountId)), Set(varItem,LookUp(InventoryAdjRequest, ID = Value(accountId))));
+
+        //If(Not(IsBlank(accountId)), UpdateContext({accountVal:LookUp(Accounts, Account = GUID(accountId))}));
+        Set(varTabSelected,1);
+        //
+        //UpdateContext({ var_showLoader: true });
+
+
+        //UpdateContext({ var_showLoader: false });
+    Children:
+      - Header_8:
+          Control: CanvasComponent
+          ComponentName: Header
+          Properties:
+            Height: =76
+            Width: =1366
+      - Icon1_6:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =49
+            Icon: =Icon.ChevronLeft
+            OnSelect: |-
+              =Navigate(HomeScreen);
+              Set(varItem,Blank());
+              Set(accountId,Blank());
+            Width: =48
+            X: =52
+            Y: =13
+      - Icon6_3:
+          Control: Classic/Icon@2.5.0
+          Properties:
+            Color: =RGBA(255, 255, 255, 1)
+            Height: =52
+            Icon: =Icon.AddLibrary
+            OnSelect: =Navigate(attScreen);
+            Width: =45
+            X: =747
+            Y: =13
+      - submitLoad_3:
+          Control: Classic/Button@2.2.0
+          Properties:
+            Color: =RGBA(255, 255, 255, 1)
+            HoverColor: =RGBA(255, 255, 255, 1)
+            OnSelect: |-
+              =//If(IsBlank(DataCardValue34.Text) && IsBlank(DataCardValue36.Text),
+              //Notify("Please Insert Load Export Number or Item Journal Number",NotificationType.Error)
+              //,SubmitForm(Form2))
+            Text: ="Submit"
+            Visible: |-
+              =/*If(DataCardValue16.Selected.Value = "Accounting Approved" && DataCardValue6.Selected.Value = "Sales Promotion",true,false)
+              */
+              false
+            X: =1180
+            Y: =18
+      - Gallery4_5:
+          Control: Gallery@2.15.0
+          Variant: Horizontal
+          Properties:
+            DelayItemLoading: =false
+            Height: =56
+            Items: |+
+              =Table({ID:1 ,lable:"Detail \ รายละเอียด"},{ID:2 ,lable:"Item \ สินค้า"},{ID:3 ,lable:"Attachments \ไฟล์แนบ"},{ID:4 ,lable:"Approver Detail \ ผู้อนุมัติ"})
+
+
+
+
+            LoadingSpinner: =LoadingSpinner.None
+            OnSelect: =Set(varTabSelected,ThisItem.ID)
+            TemplatePadding: =0
+            Width: =1313
+            X: =52
+            Y: =81
+          Children:
+            - Button1_5:
+                Control: Classic/Button@2.2.0
+                Properties:
+                  Color: =RGBA(255, 255, 255, 1)
+                  Fill: =If(varTabSelected = ThisItem.ID ,RGBA(56, 96, 178, 1),Color.Gray)
+                  Height: =42
+                  HoverColor: =RGBA(255, 255, 255, 1)
+                  OnSelect: |+
+                    =Select(Parent);
+
+                    //UpdateContext({ var_showLoader: false });
+
+                  RadiusBottomLeft: =0
+                  RadiusBottomRight: =0
+                  RadiusTopLeft: =20
+                  RadiusTopRight: =20
+                  Text: =ThisItem.lable
+                  Width: =305
+                  Y: =14
+      - DataTable1_4:
+          Control: DataTable@1.0.3
+          Properties:
+            BorderThickness: =2
+            HeadingColor: =RGBA(255, 255, 255, 1)
+            Height: =542
+            Items: =Filter(InventoryAdjDetail, Title = DataCardValue24_3.Value)
+            Visible: =varTabSelected = 2
+            Width: =1366
+            Y: =142
+          Children:
+            - brand_Column1_3:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                Properties:
+                  AutoWidth: =false
+                  FieldDisplayName: ="Product No"
+                  FieldName: ="brand"
+                  Order: =2
+                  Text: =ThisItem.productNo
+                  Width: =209
+            - MPN_Column1_4:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                Properties:
+                  AutoWidth: =false
+                  FieldDisplayName: ="MPN"
+                  FieldName: ="MPN"
+                  Order: =3
+                  Text: =ThisItem.MPN
+                  Width: =474
+            - warehouse_Column1_3:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                IsLocked: true
+                Properties:
+                  FieldDisplayName: ="Warehouse"
+                  FieldName: ="warehouse"
+                  Order: =8
+                  Text: =ThisItem.warehouse
+            - kLocation_Column1_3:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                IsLocked: true
+                Properties:
+                  FieldDisplayName: ="Location"
+                  FieldName: ="kLocation"
+                  Order: =9
+                  Text: =ThisItem.kLocation
+            - QTY_Column1_3:
+                Control: DataTableColumn@1.0.1
+                Variant: Number
+                IsLocked: true
+                Properties:
+                  AutoWidth: =false
+                  FieldDisplayName: ="QTY"
+                  FieldName: ="QTY"
+                  Order: =10
+                  Text: =ThisItem.QTY
+                  Width: =141
+            - kUnit_Column1_3:
+                Control: DataTableColumn@1.0.1
+                Variant: Textual
+                IsLocked: true
+                Properties:
+                  AutoWidth: =false
+                  FieldDisplayName: ="Unit"
+                  FieldName: ="kUnit"
+                  Order: =11
+                  Text: =ThisItem.kUnit
+                  Width: =128
+      - Form2_3:
+          Control: Form@2.4.4
+          Layout: Vertical
+          Properties:
+            BorderThickness: =1
+            DataSource: =InventoryAdjRequest
+            Height: =625
+            Item: =varItem
+            NumberOfColumns: =2
+            Width: =1366
+            Y: =143
+          Children:
+            - DataCard5_3:
+                Control: TypedDataCard@1.0.7
+                Variant: BlankCard
+                Properties:
+                  Height: =0
+                  Visible: =varTabSelected = 1
+                  Width: =1366
+                  X: =0
+                  Y: =0
+                Children:
+                  - Text1_12:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(122, 138, 143, 1)
+                        FontWeight: =FontWeight.Bold
+                        Height: =36
+                        Text: ="Requester Detail \ รายละเอียดผู้แจ้ง"
+                        Width: =1366
+            - Created By_DataCard2_3:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxView
+                Properties:
+                  DataField: ="Author"
+                  Default: =ThisItem.'Created By'
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,'Created By')
+                  Required: =false
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =0
+                  Y: =1
+                Children:
+                  - DataCardKey25_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Create by \ พนักงานผู้แจ้ง"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =14
+                  - DataCardValue25_3:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =DisplayMode.View
+                        Items: =Choices([@InventoryAdjRequest].'Created By')
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey25_3.Y + DataCardKey25_3.Height + 4
+                      Children:
+                        - DisplayName1_3:
+                            Control: ComboBoxDataField@1.5.0
+                            Variant: textualColumn
+                            IsLocked: true
+                            Properties:
+                              FieldDisplayName: ="DisplayName"
+                              FieldName: ="DisplayName"
+                              FieldType: ="s"
+                              Order: =1
+            - Company_DataCard1_3:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="Company"
+                  Default: =ThisItem.Company
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,Company)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, Company)
+                  Required: =false
+                  Update: =DataCardValue27_3.Value
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =1
+                  Y: =1
+                Children:
+                  - StarVisible22_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey27_3.Y
+                  - DataCardKey27_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Company \ บรัษัท"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue27_3:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey27_3.Y + DataCardKey27_3.Height + 4
+                  - ErrorMessage22_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue27_3.Y + DataCardValue27_3.Height
+            - Department_DataCard1_3:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="Department"
+                  Default: =ThisItem.Department
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,Department)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, Department)
+                  Required: =false
+                  Update: =DataCardValue26_3.Value
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =0
+                  Y: =2
+                Children:
+                  - StarVisible21_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey26_3.Y
+                  - DataCardKey26_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Department \ แผนก"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue26_3:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey26_3.Y + DataCardKey26_3.Height + 4
+                  - ErrorMessage21_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue26_3.Y + DataCardValue26_3.Height
+            - Position_DataCard1_3:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="Position"
+                  Default: =ThisItem.Position
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,Position)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, Position)
+                  Required: =false
+                  Update: =DataCardValue28_3.Value
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =1
+                  Y: =2
+                Children:
+                  - StarVisible23_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey28_3.Y
+                  - DataCardKey28_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Position \ ตำแหน่ง"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue28_3:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey28_3.Y + DataCardKey28_3.Height + 4
+                  - ErrorMessage23_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue28_3.Y + DataCardValue28_3.Height
+            - requestNumber_DataCard3_3:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="requestNumber"
+                  Default: =ThisItem.requestNumber
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,requestNumber)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, requestNumber)
+                  Required: =false
+                  Update: =DataCardValue13_3.Value
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =0
+                  Y: =3
+                Children:
+                  - StarVisible5_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey13_3.Y
+                  - DataCardKey13_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Request Number \ เลขที่เอกสาร"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue13_3:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey13_3.Y + DataCardKey13_3.Height + 4
+                  - ErrorMessage5_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue13_3.Y + DataCardValue13_3.Height
+            - Status_DataCard2_3:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                Properties:
+                  DataField: ="Status"
+                  Default: =ThisItem.Status
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,Status)
+                  Height: =87
+                  Required: =false
+                  Update: =DataCardValue20_3.Selected
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =1
+                  Y: =3
+                Children:
+                  - StarVisible15_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey20_3.Y
+                  - DataCardKey20_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Status \ สถานะ"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue20_3:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =DisplayMode.View
+                        Items: =Choices([@InventoryAdjRequest].Status)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey20_3.Y + DataCardKey20_3.Height + 4
+                  - ErrorMessage15_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue20_3.Y + DataCardValue20_3.Height
+            - DataCard6_3:
+                Control: TypedDataCard@1.0.7
+                Variant: BlankCard
+                Properties:
+                  Height: =0
+                  Visible: =varTabSelected = 1
+                  Width: =1366
+                  X: =0
+                  Y: =4
+                Children:
+                  - Text1_13:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(0, 74, 128, 1)
+                        FontWeight: =FontWeight.Bold
+                        Height: =36
+                        Text: ="Transection Detail \ รายละเอียดรายการ"
+                        Width: =1366
+            - Title_DataCard2_3:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="Title"
+                  Default: =ThisItem.Title
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,Title)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, Title)
+                  Required: =true
+                  Update: =DataCardValue12_3.Value
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =0
+                  Y: =5
+                Children:
+                  - StarVisible3_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        X: =652
+                        Y: =20
+                  - DataCardKey12_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="For Company \ สำหรับบริษัท"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue12_3:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey12_3.Y + DataCardKey12_3.Height + 4
+                  - ErrorMessage3_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue12_3.Y + DataCardValue12_3.Height
+            - forDepartment_DataCard2_3:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                Properties:
+                  DataField: ="forDepartment"
+                  Default: =ThisItem.forDepartment
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,forDepartment)
+                  Required: =false
+                  Update: =DataCardValue31_3.Selected
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =1
+                  Y: =5
+                Children:
+                  - StarVisible26_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey31_3.Y
+                  - DataCardKey31_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="For Department \ สำหรับแผนก"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue31_3:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =DisplayMode.View
+                        Items: =Choices([@InventoryAdjRequest].forDepartment)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey31_3.Y + DataCardKey31_3.Height + 4
+                  - ErrorMessage26_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue31_3.Y + DataCardValue31_3.Height
+            - InvAdjType_DataCard2_3:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                Properties:
+                  DataField: ="InvAdjType"
+                  Default: =ThisItem.InvAdjType
+                  DisplayMode: =DisplayMode.View
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,InvAdjType)
+                  Required: =false
+                  Update: =DataCardValue30_3.Selected
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =0
+                  Y: =6
+                Children:
+                  - StarVisible25_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey30_3.Y
+                  - DataCardKey30_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Reason \ เหตุผลการ Request"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue30_3:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =DisplayMode.View
+                        Items: =Choices([@InventoryAdjRequest].InvAdjType)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey30_3.Y + DataCardKey30_3.Height + 4
+                  - ErrorMessage25_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue30_3.Y + DataCardValue30_3.Height
+            - DateCreatedN_DataCard3_3:
+                Control: TypedDataCard@1.0.7
+                Variant: DateEdit
+                Properties:
+                  DataField: ="DateCreatedN"
+                  Default: =ThisItem.DateCreatedN
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,DateCreatedN)
+                  Required: =false
+                  Update: =DataCardValue19_3.SelectedDate
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =1
+                  Y: =6
+                Children:
+                  - StarVisible14_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey19_3.Y
+                  - DataCardKey19_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Date Create \ วันที่สร้างเอกสาร"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue19_3:
+                      Control: DatePicker@0.0.46
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        Appearance: ='DatePickerCanvas.Appearance'.FilledDarker
+                        DateTimeZone: ='DatePickerCanvas.DateTimeZone'.Local
+                        DisplayMode: =DisplayMode.View
+                        EndDate: =Date(Year(Today())+100, 12, 31)
+                        Format: ='DatePickerCanvas.Format'.LongAbbreviated
+                        SelectedDate: =Parent.Default
+                        StartDate: =Date(1900, 1, 1)
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey19_3.Y + DataCardKey19_3.Height + 4
+                  - ErrorMessage14_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue19_3.Y + DataCardValue19_3.Height
+            - reasonDetail_DataCard3_3:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="reasonDetail"
+                  Default: =ThisItem.reasonDetail
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,reasonDetail)
+                  Height: =119
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, reasonDetail)
+                  Required: =false
+                  Update: =DataCardValue18_3.Value
+                  Visible: =varTabSelected = 1
+                  Width: =1366
+                  X: =0
+                  Y: =7
+                Children:
+                  - StarVisible9_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey18_3.Y
+                  - DataCardKey18_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Detail \ รายละเอียด"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue18_3:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Height: =72
+                        Mode: ='TextInputCanvas.Mode'.Multiline
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey18_3.Y + DataCardKey18_3.Height + 4
+                  - ErrorMessage9_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue18_3.Y + DataCardValue18_3.Height
+            - DataCard7_3:
+                Control: TypedDataCard@1.0.7
+                Variant: BlankCard
+                Properties:
+                  Height: =0
+                  Visible: =varTabSelected = 1
+                  Width: =1366
+                  X: =0
+                  Y: =8
+                Children:
+                  - Text1_14:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(122, 138, 143, 1)
+                        FontWeight: =FontWeight.Bold
+                        Height: =36
+                        Text: =" Head Approver Detail \ รายละเอียดผู้อนุมัติ"
+                        Width: =1366
+            - approverStatus_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                Properties:
+                  DataField: ="approverStatus"
+                  Default: =ThisItem.approverStatus
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,approverStatus)
+                  Required: =false
+                  Update: =DataCardValue21.Selected
+                  Visible: =varTabSelected = 1
+                  Width: =1366
+                  X: =0
+                  Y: =9
+                Children:
+                  - DataCardKey21:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Head Approver Status"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue21:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =DisplayMode.View
+                        Items: =Choices([@InventoryAdjRequest].approverStatus)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey21.Y + DataCardKey21.Height + 4
+                  - ErrorMessage23:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue21.Y + DataCardValue21.Height
+                  - StarVisible23:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey21.Y
+            - ApproverDate_DataCard2_3:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="ApproverDate"
+                  Default: =ThisItem.ApproverDate
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,ApproverDate)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, ApproverDate)
+                  Required: =false
+                  Update: =DataCardValue34_3.Value
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =0
+                  Y: =10
+                Children:
+                  - StarVisible28_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey34_3.Y
+                  - DataCardKey34_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Date & Time \ วันที่และเวลา"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue34_3:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey34_3.Y + DataCardKey34_3.Height + 4
+                  - ErrorMessage28_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue34_3.Y + DataCardValue34_3.Height
+            - ApproverN_DataCard3_3:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                Properties:
+                  DataField: ="ApproverN"
+                  Default: =ThisItem.ApproverN
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,ApproverN)
+                  Required: =false
+                  Update: =DataCardValue32_3.Selected
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =1
+                  Y: =10
+                Children:
+                  - StarVisible27_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey32_3.Y
+                  - DataCardKey32_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Head Approver"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue32_3:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =DisplayMode.View
+                        Items: =Choices([@InventoryAdjRequest].ApproverN)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey32_3.Y + DataCardKey32_3.Height + 4
+                      Children:
+                        - DisplayName2_3:
+                            Control: ComboBoxDataField@1.5.0
+                            Variant: textualColumn
+                            IsLocked: true
+                            Properties:
+                              FieldDisplayName: ="DisplayName"
+                              FieldName: ="DisplayName"
+                              FieldType: ="s"
+                              Order: =1
+                  - ErrorMessage27_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue32_3.Y + DataCardValue32_3.Height
+            - ApproveComment_DataCard1_3:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="ApproveComment"
+                  Default: =ThisItem.ApproveComment
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,ApproveComment)
+                  Height: =124
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, ApproveComment)
+                  Required: =false
+                  Update: =DataCardValue36_3.Value
+                  Visible: =varTabSelected = 1
+                  Width: =1366
+                  X: =0
+                  Y: =11
+                Children:
+                  - StarVisible29_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey36_3.Y
+                  - DataCardKey36_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Comment"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue36_3:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Height: =62
+                        Mode: ='TextInputCanvas.Mode'.Multiline
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey36_3.Y + DataCardKey36_3.Height + 4
+                  - ErrorMessage29_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue36_3.Y + DataCardValue36_3.Height
+            - DataCard8_2:
+                Control: TypedDataCard@1.0.7
+                Variant: BlankCard
+                Properties:
+                  Height: =27
+                  Visible: =varTabSelected = 1
+                  Width: =1366
+                  X: =0
+                  Y: =12
+                Children:
+                  - Text1_15:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(122, 138, 143, 1)
+                        FontWeight: =FontWeight.Bold
+                        Height: =36
+                        Text: ="Warehouse Detail \ รายละเอียดส่วนงาน Warehouse"
+                        Width: =1366
+            - whStatus_DataCard3_2:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                Properties:
+                  DataField: ="whStatus"
+                  Default: =ThisItem.whStatus
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,whStatus)
+                  Required: =false
+                  Update: =DataCardValue3_2.Selected
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =0
+                  Y: =13
+                Children:
+                  - StarVisible2_2:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey3_2.Y
+                  - DataCardKey3_2:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Warehouse Approve Status"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue3_2:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =DisplayMode.View
+                        Items: =Choices([@InventoryAdjRequest].whStatus)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey3_2.Y + DataCardKey3_2.Height + 4
+                      Children:
+                        - Value1_2:
+                            Control: ComboBoxDataField@1.5.0
+                            Variant: textualColumn
+                            IsLocked: true
+                            Properties:
+                              FieldDisplayName: ="Value"
+                              FieldName: ="Value"
+                              FieldType: ="s"
+                              Order: =1
+                  - ErrorMessage2_2:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue3_2.Y + DataCardValue3_2.Height
+            - IJNNumber_DataCard1_2:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="IJNNumber"
+                  Default: =ThisItem.IJNNumber
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,IJNNumber)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, IJNNumber)
+                  Required: =false
+                  Update: =DataCardValue37_2.Value
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =1
+                  Y: =13
+                Children:
+                  - StarVisible30_2:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey37_2.Y
+                  - DataCardKey37_2:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        FontColor: =RGBA(15, 108, 189, 1)
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue37_2:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey37_2.Y + DataCardKey37_2.Height + 4
+                  - ErrorMessage30_2:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue37_2.Y + DataCardValue37_2.Height
+            - whApprover_DataCard1_2:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                Properties:
+                  DataField: ="whApprover"
+                  Default: =ThisItem.whApprover
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,whApprover)
+                  Required: =false
+                  Update: =DataCardValue4_2.Selected
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =0
+                  Y: =14
+                Children:
+                  - StarVisible6_2:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey4_2.Y
+                  - DataCardKey4_2:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Warehouse Staff \ พนักงานคลังสินค้าผู้ดำเนินการ"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue4_2:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =DisplayMode.View
+                        Items: =Choices([@InventoryAdjRequest].whApprover)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey4_2.Y + DataCardKey4_2.Height + 4
+                      Children:
+                        - DisplayName3_2:
+                            Control: ComboBoxDataField@1.5.0
+                            Variant: textualColumn
+                            IsLocked: true
+                            Properties:
+                              FieldDisplayName: ="DisplayName"
+                              FieldName: ="DisplayName"
+                              FieldType: ="s"
+                              Order: =1
+                  - ErrorMessage6_2:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue4_2.Y + DataCardValue4_2.Height
+            - whDate_DataCard1_2:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="whDate"
+                  Default: =ThisItem.whDate
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,whDate)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, whDate)
+                  Required: =false
+                  Update: =DataCardValue5_2.Value
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =1
+                  Y: =14
+                Children:
+                  - StarVisible7_2:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey5_2.Y
+                  - DataCardKey5_2:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Date & Time \ วันที่และเวลา"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue5_2:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey5_2.Y + DataCardKey5_2.Height + 4
+                  - ErrorMessage7_2:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue5_2.Y + DataCardValue5_2.Height
+            - whComment_DataCard1_2:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="whComment"
+                  Default: =ThisItem.whComment
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,whComment)
+                  Height: =117
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, whComment)
+                  Required: =false
+                  Update: =DataCardValue6_2.Value
+                  Visible: =varTabSelected = 1
+                  Width: =1366
+                  X: =0
+                  Y: =15
+                Children:
+                  - StarVisible8_2:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey6_2.Y
+                  - DataCardKey6_2:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Comment"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue6_2:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =Parent.DisplayMode
+                        Height: =62
+                        Mode: ='TextInputCanvas.Mode'.Multiline
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey6_2.Y + DataCardKey6_2.Height + 4
+                  - ErrorMessage8_2:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue6_2.Y + DataCardValue6_2.Height
+            - DataCard9_1:
+                Control: TypedDataCard@1.0.7
+                Variant: BlankCard
+                Properties:
+                  Height: =7
+                  Visible: =varTabSelected = 1
+                  Width: =1366
+                  X: =0
+                  Y: =16
+                Children:
+                  - Text1_16:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(122, 138, 143, 1)
+                        FontWeight: =FontWeight.Bold
+                        Height: =36
+                        Text: ="Accounting Detail \ รายละเอียดส่วนงาน Accounting"
+                        Width: =1366
+            - accStatus_DataCard1_1:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                Properties:
+                  DataField: ="accStatus"
+                  Default: =ThisItem.accStatus
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,accStatus)
+                  Required: =false
+                  Update: =DataCardValue1_1.Selected
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =0
+                  Y: =17
+                Children:
+                  - StarVisible1_1:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey1_1.Y
+                  - DataCardKey1_1:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Accounting Officer Status"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue1_1:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =DisplayMode.View
+                        Items: =Choices([@InventoryAdjRequest].accStatus)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey1_1.Y + DataCardKey1_1.Height + 4
+                  - ErrorMessage1_1:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue1_1.Y + DataCardValue1_1.Height
+            - AdjAmount_DataCard1_1:
+                Control: TypedDataCard@1.0.7
+                Variant: NumberEdit
+                Properties:
+                  DataField: ="grandTotal"
+                  Default: =ThisItem.AdjAmount
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,AdjAmount)
+                  Required: =false
+                  Update: =Value(DataCardValue10_1.Value)
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =1
+                  Y: =17
+                Children:
+                  - StarVisible32_1:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey10_1.Y
+                  - DataCardKey10_1:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        FontColor: =RGBA(15, 108, 189, 1)
+                        Height: =22
+                        Text: ="Adjust Amount"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue10_1:
+                      Control: NumberInput@2.9.12
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Max: =Blank()
+                        Min: =Blank()
+                        Precision: ='NumberInput.Precision'.'2'
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Text(Parent.Default,"#,##0.00")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey10_1.Y + DataCardKey10_1.Height + 4
+                  - ErrorMessage32_1:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue10_1.Y + DataCardValue10_1.Height
+            - accProve_DataCard1_1:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                Properties:
+                  DataField: ="accProveMatrix"
+                  Default: =ThisItem.accProve
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,accProve)
+                  Required: =false
+                  Update: =DataCardValue9_1.Selected
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =0
+                  Y: =18
+                Children:
+                  - StarVisible31_1:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey9_1.Y
+                  - DataCardKey9_1:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Accounting Officer \ พนักงานบัญชีผู้ดำเนินการ"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue9_1:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =DisplayMode.View
+                        Items: =Choices([@InventoryAdjRequest].accProve)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey9_1.Y + DataCardKey9_1.Height + 4
+                      Children:
+                        - DisplayName4_1:
+                            Control: ComboBoxDataField@1.5.0
+                            Variant: textualColumn
+                            IsLocked: true
+                            Properties:
+                              FieldDisplayName: ="DisplayName"
+                              FieldName: ="DisplayName"
+                              FieldType: ="s"
+                              Order: =1
+                  - ErrorMessage31_1:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue9_1.Y + DataCardValue9_1.Height
+            - accProveDate_DataCard1_1:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="accProveMatrixDate"
+                  Default: =ThisItem.accProveDate
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,accProveDate)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, accProveDate)
+                  Required: =false
+                  Update: =DataCardValue2_1.Value
+                  Visible: =varTabSelected = 1
+                  Width: =682
+                  X: =1
+                  Y: =18
+                Children:
+                  - StarVisible16_1:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey2_1.Y
+                  - DataCardKey2_1:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Date & Time \ วันที่และเวลา"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue2_1:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey2_1.Y + DataCardKey2_1.Height + 4
+                  - ErrorMessage16_1:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue2_1.Y + DataCardValue2_1.Height
+            - accProveComment_DataCard1_1:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="accProveMatrixComment"
+                  Default: =ThisItem.accProveComment
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,accProveComment)
+                  Height: =103
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, accProveComment)
+                  Required: =false
+                  Update: =DataCardValue7_1.Value
+                  Visible: =varTabSelected = 1
+                  Width: =1366
+                  X: =0
+                  Y: =19
+                Children:
+                  - StarVisible19_1:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey7_1.Y
+                  - DataCardKey7_1:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: ="Comment"
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue7_1:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =DisplayMode.View
+                        Height: =50
+                        Mode: ='TextInputCanvas.Mode'.Multiline
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey7_1.Y + DataCardKey7_1.Height + 4
+                  - ErrorMessage19_1:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue7_1.Y + DataCardValue7_1.Height
+            - DataCard5:
+                Control: TypedDataCard@1.0.7
+                Variant: BlankCard
+                Properties:
+                  Height: =11
+                  Visible: =varTabSelected = 4
+                  Width: =1366
+                  X: =0
+                  Y: =20
+                Children:
+                  - Text1_17:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(15, 84, 140, 1)
+                        FontWeight: =FontWeight.Bold
+                        Height: =36
+                        Text: ="GL Manager Detail \ รายละเอียดผู้อนุมัติ"
+                        Width: =1366
+            - glStatus_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="glStatus"
+                  Default: =ThisItem.glStatus
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,glStatus)
+                  Required: =false
+                  Update: =DataCardValue24.Selected
+                  Visible: =varTabSelected = 4
+                  Width: =1366
+                  X: =0
+                  Y: =21
+                Children:
+                  - DataCardKey24:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue24:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =Parent.DisplayMode
+                        Items: =Choices([@InventoryAdjRequest].glStatus)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey24.Y + DataCardKey24.Height + 4
+                  - ErrorMessage26:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue24.Y + DataCardValue24.Height
+                  - StarVisible26:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey24.Y
+            - glManagerApprover_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="glManagerApprover"
+                  Default: =ThisItem.glManagerApprover
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,glManagerApprover)
+                  Required: =false
+                  Update: =DataCardValue11.Selected
+                  Visible: =varTabSelected = 4
+                  Width: =682
+                  X: =0
+                  Y: =22
+                Children:
+                  - DataCardKey11:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue11:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =Parent.DisplayMode
+                        Items: =Choices([@InventoryAdjRequest].glManagerApprover)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey11.Y + DataCardKey11.Height + 4
+                  - ErrorMessage3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue11.Y + DataCardValue11.Height
+                  - StarVisible3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey11.Y
+            - glManagerDate_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="glManagerDate"
+                  Default: =ThisItem.glManagerDate
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,glManagerDate)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, glManagerDate)
+                  Required: =false
+                  Update: =DataCardValue13.Value
+                  Visible: =varTabSelected = 4
+                  Width: =682
+                  X: =1
+                  Y: =22
+                Children:
+                  - DataCardKey13:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue13:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =Parent.DisplayMode
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey13.Y + DataCardKey13.Height + 4
+                  - ErrorMessage5:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue13.Y + DataCardValue13.Height
+                  - StarVisible5:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey13.Y
+            - glManagerComment_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="glManagerComment"
+                  Default: =ThisItem.glManagerComment
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,glManagerComment)
+                  Height: =95
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, glManagerComment)
+                  Required: =false
+                  Update: =DataCardValue12.Value
+                  Visible: =varTabSelected = 4
+                  Width: =1366
+                  X: =0
+                  Y: =23
+                Children:
+                  - DataCardKey12:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue12:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =Parent.DisplayMode
+                        Height: =47
+                        Mode: ='TextInputCanvas.Mode'.Multiline
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey12.Y + DataCardKey12.Height + 4
+                  - ErrorMessage4:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue12.Y + DataCardValue12.Height
+                  - StarVisible4:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey12.Y
+            - DataCard6:
+                Control: TypedDataCard@1.0.7
+                Variant: BlankCard
+                Properties:
+                  Height: =6
+                  Visible: =varTabSelected = 4
+                  Width: =1366
+                  X: =0
+                  Y: =24
+                Children:
+                  - Text1_18:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(15, 84, 140, 1)
+                        FontWeight: =FontWeight.Bold
+                        Height: =36
+                        Text: ="Finance Director Detail \ รายละเอียดผู้อนุมัติ"
+                        Width: =1366
+            - fdStatus_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="fdStatus"
+                  Default: =ThisItem.fdStatus
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,fdStatus)
+                  Required: =false
+                  Update: =DataCardValue23.Selected
+                  Visible: =varTabSelected = 4
+                  Width: =1366
+                  X: =0
+                  Y: =25
+                Children:
+                  - DataCardKey23:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue23:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =Parent.DisplayMode
+                        Items: =Choices([@InventoryAdjRequest].fdStatus)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey23.Y + DataCardKey23.Height + 4
+                  - ErrorMessage25:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue23.Y + DataCardValue23.Height
+                  - StarVisible25:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey23.Y
+            - fdApprover_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="fdApprover"
+                  Default: =ThisItem.fdApprover
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,fdApprover)
+                  Required: =false
+                  Update: =DataCardValue15.Selected
+                  Visible: =varTabSelected = 4
+                  Width: =682
+                  X: =0
+                  Y: =26
+                Children:
+                  - DataCardKey15:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue15:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =Parent.DisplayMode
+                        Items: =Choices([@InventoryAdjRequest].fdApprover)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey15.Y + DataCardKey15.Height + 4
+                  - ErrorMessage9:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue15.Y + DataCardValue15.Height
+                  - StarVisible9:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey15.Y
+            - fdDate_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="fdDate"
+                  Default: =ThisItem.fdDate
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,fdDate)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, fdDate)
+                  Required: =false
+                  Update: =DataCardValue17.Value
+                  Visible: =varTabSelected = 4
+                  Width: =682
+                  X: =1
+                  Y: =26
+                Children:
+                  - DataCardKey17:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue17:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =Parent.DisplayMode
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey17.Y + DataCardKey17.Height + 4
+                  - ErrorMessage15:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue17.Y + DataCardValue17.Height
+                  - StarVisible15:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey17.Y
+            - fdComment_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="fdComment"
+                  Default: =ThisItem.fdComment
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,fdComment)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, fdComment)
+                  Required: =false
+                  Update: =DataCardValue16.Value
+                  Visible: =varTabSelected = 4
+                  Width: =1366
+                  X: =0
+                  Y: =27
+                Children:
+                  - DataCardKey16:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue16:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =Parent.DisplayMode
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey16.Y + DataCardKey16.Height + 4
+                  - ErrorMessage14:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue16.Y + DataCardValue16.Height
+                  - StarVisible14:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey16.Y
+            - DataCard7:
+                Control: TypedDataCard@1.0.7
+                Variant: BlankCard
+                Properties:
+                  Fill: =RGBA(15, 84, 140, 1)
+                  Height: =9
+                  Visible: =varTabSelected = 4
+                  Width: =1366
+                  X: =0
+                  Y: =28
+                Children:
+                  - Text1_19:
+                      Control: ModernText@1.0.0
+                      Properties:
+                        Color: =RGBA(255, 255, 255, 1)
+                        Fill: =RGBA(15, 84, 140, 1)
+                        FontWeight: =FontWeight.Bold
+                        Height: =36
+                        Text: ="Country Managing Director Detail \ รายละเอียดผู้อนุมัติ"
+                        Width: =1366
+            - cmdStatus_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="cmdStatus"
+                  Default: =ThisItem.cmdStatus
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,cmdStatus)
+                  Required: =false
+                  Update: =DataCardValue22.Selected
+                  Visible: =varTabSelected = 4
+                  Width: =1366
+                  X: =0
+                  Y: =29
+                Children:
+                  - DataCardKey22:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue22:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =Parent.DisplayMode
+                        Items: =Choices([@InventoryAdjRequest].cmdStatus)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey22.Y + DataCardKey22.Height + 4
+                  - ErrorMessage24:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue22.Y + DataCardValue22.Height
+                  - StarVisible24:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey22.Y
+            - cmdApprover_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: ComboBoxEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="cmdApprover"
+                  Default: =ThisItem.cmdApprover
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,cmdApprover)
+                  Required: =false
+                  Update: =DataCardValue18.Selected
+                  Visible: =varTabSelected = 4
+                  Width: =682
+                  X: =0
+                  Y: =30
+                Children:
+                  - DataCardKey18:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue18:
+                      Control: ComboBox@0.0.51
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DefaultSelectedItems: =[Parent.Default]
+                        DisplayMode: =Parent.DisplayMode
+                        Items: =Choices([@InventoryAdjRequest].cmdApprover)
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey18.Y + DataCardKey18.Height + 4
+                  - ErrorMessage20:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue18.Y + DataCardValue18.Height
+                  - StarVisible20:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =20
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey18.Y
+            - cmdDate_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="cmdDate"
+                  Default: =ThisItem.cmdDate
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,cmdDate)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, cmdDate)
+                  Required: =false
+                  Update: =DataCardValue20.Value
+                  Visible: =varTabSelected = 4
+                  Width: =682
+                  X: =1
+                  Y: =30
+                Children:
+                  - DataCardKey20:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue20:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =Parent.DisplayMode
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey20.Y + DataCardKey20.Height + 4
+                  - ErrorMessage22:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue20.Y + DataCardValue20.Height
+                  - StarVisible22:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey20.Y
+            - cmdComment_DataCard1:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="cmdComment"
+                  Default: =ThisItem.cmdComment
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,cmdComment)
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, cmdComment)
+                  Required: =false
+                  Update: =DataCardValue19.Value
+                  Visible: =varTabSelected = 4
+                  Width: =1366
+                  X: =0
+                  Y: =31
+                Children:
+                  - DataCardKey19:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue19:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =Parent.DisplayMode
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey19.Y + DataCardKey19.Height + 4
+                  - ErrorMessage21:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue19.Y + DataCardValue19.Height
+                  - StarVisible21:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey19.Y
+            - Attachments_DataCard1_3:
+                Control: TypedDataCard@1.0.7
+                Variant: ClassicAttachmentsEdit
+                IsLocked: true
+                Properties:
+                  DataField: ="{Attachments}"
+                  Default: =ThisItem.Attachments
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,Attachments)
+                  Required: =false
+                  Update: =DataCardValue29_3.Attachments
+                  Visible: =varTabSelected = 3
+                  Width: =1366
+                  X: =0
+                  Y: =32
+                Children:
+                  - StarVisible24_3:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: =Align.Center
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =App.Theme.Colors.Darker30
+                        Height: =DataCardKey29_3.Height
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Wrap: =false
+                        Y: =DataCardKey29_3.Y
+                  - DataCardKey29_3:
+                      Control: Label@2.5.1
+                      MetadataKey: FieldName
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =App.Theme.Colors.Darker30
+                        Height: =34
+                        Text: =Parent.DisplayName
+                        Width: =Parent.Width - 60
+                        Wrap: =false
+                        X: =30
+                        Y: =10
+                  - DataCardValue29_3:
+                      Control: Attachments@2.3.0
+                      MetadataKey: FieldValue
+                      Properties:
+                        BorderColor: =If(IsBlank(Parent.Error), Parent.BorderColor, Color.Red)
+                        DisplayMode: =Parent.DisplayMode
+                        Items: =Parent.Default
+                        PaddingBottom: =5
+                        PaddingLeft: =If(Self.DisplayMode = DisplayMode.Edit, 5, 0)
+                        PaddingRight: =5
+                        PaddingTop: =5
+                        Tooltip: =Parent.DisplayName
+                        Width: =Parent.Width - 60
+                        X: =30
+                        Y: =DataCardKey29_3.Y + DataCardKey29_3.Height + 5
+                  - ErrorMessage24_3:
+                      Control: Label@2.5.1
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        AutoHeight: =true
+                        BorderColor: =RGBA(0, 0, 0, 1)
+                        Color: =RGBA(168, 0, 0, 1)
+                        FontWeight: =FontWeight.Semibold
+                        Height: =10
+                        Live: =Live.Assertive
+                        PaddingBottom: =0
+                        PaddingLeft: =0
+                        PaddingRight: =0
+                        PaddingTop: =0
+                        Size: =14
+                        Text: =Parent.Error
+                        Visible: =Parent.DisplayMode=DisplayMode.Edit
+                        Width: =Parent.Width - 60
+                        X: =30
+                        Y: =DataCardValue29_3.Y + DataCardValue29_3.Height
+            - uniqueid_DataCard1_3:
+                Control: TypedDataCard@1.0.7
+                Variant: TextualEdit
+                Properties:
+                  DataField: ="uniqueid0"
+                  Default: =ThisItem.uniqueid
+                  DisplayName: =DataSourceInfo([@InventoryAdjRequest],DataSourceInfo.DisplayName,uniqueid)
+                  Height: =39
+                  MaxLength: =DataSourceInfo([@InventoryAdjRequest], DataSourceInfo.MaxLength, uniqueid)
+                  Required: =false
+                  Update: =DataCardValue24_3.Value
+                  Visible: =false
+                  Width: =682
+                  X: =0
+                  Y: =33
+                Children:
+                  - StarVisible20_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldRequired
+                      Properties:
+                        Align: ='TextCanvas.Align'.Center
+                        Height: =30
+                        Text: ="*"
+                        Visible: =And(Parent.Required, Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =30
+                        Y: =DataCardKey24_3.Y
+                  - DataCardKey24_3:
+                      Control: Text@0.0.51
+                      MetadataKey: FieldName
+                      Properties:
+                        Height: =22
+                        Text: =Parent.DisplayName
+                        Weight: ='TextCanvas.Weight'.Semibold
+                        Width: =Parent.Width - 48
+                        Wrap: =false
+                        X: =24
+                        Y: =10
+                  - DataCardValue24_3:
+                      Control: TextInput@0.0.54
+                      MetadataKey: FieldValue
+                      Properties:
+                        AccessibleLabel: =Parent.DisplayName
+                        DisplayMode: =Parent.DisplayMode
+                        Mode: ="'TextInputCanvas.Mode'.TextInputModeSingleLine"
+                        Required: =Parent.Required
+                        ValidationState: =If(IsBlank(Parent.Error), "None", "Error")
+                        Value: =Parent.Default
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardKey24_3.Y + DataCardKey24_3.Height + 4
+                  - ErrorMessage20_3:
+                      Control: Text@0.0.51
+                      MetadataKey: ErrorMessage
+                      Properties:
+                        Height: =30
+                        Text: =Parent.Error
+                        Visible: =And(!IsBlank(Parent.Error), Parent.DisplayMode=DisplayMode.Edit)
+                        Width: =Parent.Width - 48
+                        X: =24
+                        Y: =DataCardValue24_3.Y + DataCardValue24_3.Height
+      - Gallery5_13:
+          Control: Gallery@2.15.0
+          Variant: BrowseLayout_Vertical_TwoTextVariant_ver5.0
+          Properties:
+            Height: =199
+            Items: =colCustomerARS
+            OnSelect: =
+            TemplateSize: =35
+            Visible: =varTabSelected = 4
+            Width: =667
+            Y: =484
+          Children:
+            - Rectangle4_13:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =App.Theme.Colors.Darker30
+                  Height: =Parent.TemplateHeight - Separator5_13.Height
+                  OnSelect: =Select(Parent)
+                  Visible: =ThisItem.IsSelected
+                  Width: =4
+            - Title6_34:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =23
+                  OnSelect: =Select(Parent)
+                  Text: =ThisItem.Period
+                  Width: =165
+                  X: =26
+                  Y: =4
+            - Title6_35:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Height: =23
+                  OnSelect: =Select(Parent)
+                  Text: =Text(ThisItem.SumBalance,"#,##.##")
+                  Width: =177
+                  X: =279
+                  Y: =4
+            - Separator5_13:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Height: =8
+                  OnSelect: =Select(Parent)
+                  Width: =Parent.TemplateWidth
+                  Y: =Parent.TemplateHeight - Self.Height
+      - Gallery5_14:
+          Control: Gallery@2.15.0
+          Variant: BrowseLayout_Vertical_TwoTextVariant_ver5.0
+          Properties:
+            Height: =199
+            Items: =SortByColumns(CustomerDataSumSumOnly,"AgingID",SortOrder.Ascending)
+            OnSelect: =
+            TemplateSize: =35
+            Visible: =varTabSelected = 4
+            Width: =667
+            X: =699
+            Y: =484
+          Children:
+            - Rectangle4_14:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =App.Theme.Colors.Darker30
+                  Height: =Parent.TemplateHeight - Separator5_14.Height
+                  OnSelect: =Select(Parent)
+                  Visible: =ThisItem.IsSelected
+                  Width: =4
+            - Title6_36:
+                Control: Label@2.5.1
+                Properties:
+                  Height: =23
+                  OnSelect: =Select(Parent)
+                  Text: =ThisItem.Aging
+                  Width: =85
+                  X: =39
+                  Y: =2
+            - Title6_37:
+                Control: Label@2.5.1
+                Properties:
+                  Align: =Align.Center
+                  Height: =23
+                  OnSelect: =Select(Parent)
+                  Text: =Text(ThisItem.'Sum of Cost',"#,##.##")
+                  Width: =167
+                  X: =250
+                  Y: =4
+            - Separator5_14:
+                Control: Rectangle@2.3.0
+                Properties:
+                  Fill: =RGBA(255, 255, 255, 1)
+                  Height: =8
+                  OnSelect: =Select(Parent)
+                  Width: =Parent.TemplateWidth
+                  Y: =Parent.TemplateHeight - Self.Height
